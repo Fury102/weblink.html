@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chúa Tể Săn Sale 🛍️</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #fff5ee 0%, #ffe0cc 50%, #ffffff 100%);
+      margin: 0;
+      padding: 20px 10px;
+      color: #333;
+      min-height: 100vh;
+      scroll-behavior: smooth;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff6600;
+      margin: 10px 0 25px 0;
+      text-shadow: 1px 1px 2px rgba(255, 102, 0, 0.2);
+      font-size: clamp(1.3rem, 4vw, 2rem);
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    h1 img {
+      height: clamp(35px, 6vw, 50px);
+      width: clamp(35px, 6vw, 50px);
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .topic {
+      position: relative;
+      background: linear-gradient(145deg, #fff8f3, #fff3e6);
+      border: 2px solid #ff6600;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(255, 102, 0, 0.2);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      padding: 25px 10px;
+      text-align: center;
+    }
+
+    .topic:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 18px rgba(255, 102, 0, 0.35);
+    }
+
+    .topic h2 {
+      color: #ff6600;
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .topic p {
+      font-size: 13px;
+      color: #555;
+    }
+
+    .label-sale {
+      position: absolute;
+      background-color: #ff6600;
+      color: #fff;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 2px 5px;
+      border-radius: 4px;
+      top: 8px;
+      left: 8px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 10px;
+      color: #777;
+      font-size: 13px;
+      margin-top: 40px;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 15px;
+    }
+
+    .popup.show {
+      display: flex;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .popup.hide {
+      animation: fadeOut 0.3s ease forwards;
+    }
+
+    @keyframes fadeIn { from {background: rgba(0,0,0,0);} to {background: rgba(0,0,0,0.4);} }
+    @keyframes fadeOut { from {background: rgba(0,0,0,0.4);} to {background: rgba(0,0,0,0);} }
+
+    .popup-content {
+      background: linear-gradient(180deg, #fff8f3, #ffffff);
+      border-radius: 20px;
+      padding: 20px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 4px 15px rgba(255,102,0,0.3);
+      position: relative;
+      overflow-y: auto;
+      max-height: 80vh;
+      scrollbar-width: thin;
+      scrollbar-color: #ff6600 #ffe9dd;
+    }
+
+    .popup-content.show { animation: slideInLeft 0.4s ease forwards; }
+    .popup-content.hide { animation: slideOutRight 0.4s ease forwards; }
+
+    @keyframes slideInLeft { from { transform: scale(0.9) translateX(20px); opacity: 0; } to { transform: scale(1) translateX(0); opacity: 1; } }
+    @keyframes slideOutRight { from { transform: scale(1) translateX(0); opacity: 1; } to { transform: scale(0.9) translateX(20px); opacity: 0; } }
+
+    .popup-content h2 {
+      color: #ff6600;
+      margin-bottom: 10px;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    .popup-content p { font-size: 14px; color: #444; line-height: 1.6; white-space: pre-line; }
+    .close-btn { 
+      background: none; border: none; font-size: 22px; color: #ff6600; 
+      position: sticky; top: 10px; right: 15px; cursor: pointer; z-index: 10; 
+    }
+
+    #topBtn {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 2000;
+      background-color: #ff6600;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    #topBtn:hover { transform: scale(1.1); opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <h1>
+    <img src="https://i.pinimg.com/originals/bf/12/6b/bf126bd27294464c8f959056468dbb9f.gif" alt="Bubu Dudu Panda" />
+    Chúa Tể Săn Sale
+    <img src="https://i.pinimg.com/originals/bf/12/6b/bf126bd27294464c8f959056468dbb9f.gif" alt="Bubu Dudu Panda" />
+  </h1>
+
+  <div class="grid">
+    <div class="topic" onclick="showFlashSale()">
+      <span class="label-sale">HOT</span>
+      <h2>🔥 Flash Sale</h2>
+      <p>Chi tiết từng bước giúp bạn săn sale siêu tốc.</p>
+    </div>
+
+    <div class="topic" onclick="showPopup()">
+      <span class="label-sale">SALE</span>
+      <h2>🏷️ Mã giảm giá</h2>
+      <p>Mẹo lưu và nhập mã đúng cách để tiết kiệm tối đa.</p>
+    </div>
+
+    <div class="topic" onclick="showPopup()">
+      <span class="label-sale">HOT</span>
+      <h2>🔥 Deal 0đ</h2>
+      <p>Mẹo trúng deal miễn phí dễ nhất.</p>
+    </div>
+  </div>
+
+  <div class="popup" id="popup">
+    <div class="popup-content" id="popupContent">
+      <button class="close-btn" onclick="closePopup()">✕</button>
+      <h2 id="popupTitle"></h2>
+      <p id="popupText"></p>
+    </div>
+  </div>
+
+  <button onclick="topFunction()" id="topBtn" title="Lên đầu trang">↑</button>
+
+  <footer>© 2025 - Chúa Tể Săn Sale | Bí kíp săn deal hot mỗi ngày 🧡</footer>
+
+  <script>
+    const popup = document.getElementById("popup");
+    const popupContent = document.getElementById("popupContent");
+
+    function showPopup() {
+      document.getElementById("popupTitle").textContent = "";
+      document.getElementById("popupText").innerHTML = "";
+      popup.style.display = "flex";
+      popup.classList.remove("hide");
+      popupContent.classList.remove("hide");
+      popup.classList.add("show");
+      popupContent.classList.add("show");
+    }
+
+    function showFlashSale() {
+      const title = "🔥 FLASH SALE 0H 25/4";
+      const content = `
+𝐒𝐀𝐋𝐄 𝟎𝐇 𝟐𝟓/𝟒‼
+Ae còn bất kỳ thắc mắc gì hỏi thoải mái bên dưới nhé 
+📌𝐌𝐚̃ 𝟐𝟎% 𝐦𝐚𝐱 𝟏𝐭𝐫 (tất cả đều có) lưu tại đây
+<a href="https://shope.ee/9KLX5GeB09" target="_blank">https://shope.ee/9KLX5GeB09</a>
+📌𝐌𝐚̃ 𝟏𝟓% 𝐦𝐚𝐱 𝟏𝐭𝐫, 𝟏𝟐% 𝐦𝐚𝐱 𝟏-𝟑𝐭𝐫, 𝟏𝟎% 𝐦𝐚𝐱 𝟏-𝟑𝐭𝐫
+<a href="https://shope.ee/1VUNbN3Hke" target="_blank">https://shope.ee/1VUNbN3Hke</a>
+...
+(Đặt hết nội dung bạn cung cấp ở đây, thay tất cả link bằng thẻ <a> để click được)
+`;
+      document.getElementById("popupTitle").textContent = title;
+      document.getElementById("popupText").innerHTML = content;
+      popup.style.display = "flex";
+      popup.classList.remove("hide");
+      popupContent.classList.remove("hide");
+      popup.classList.add("show");
+      popupContent.classList.add("show");
+    }
+
+    function closePopup() {
+      popup.classList.remove("show");
+      popupContent.classList.remove("show");
+      popup.classList.add("hide");
+      popupContent.classList.add("hide");
+      setTimeout(() => { popup.style.display = "none"; }, 300);
+    }
+
+    // Click ngoài popup-content sẽ đóng popup
+    popup.addEventListener('click', function(e) {
+      if (e.target === popup) {
+        closePopup();
+      }
+    });
+
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+      const topBtn = document.getElementById("topBtn");
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        topBtn.style.display = "block";
+      } else {
+        topBtn.style.display = "none";
+      }
+    }
+
+    function topFunction() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+  </script>
+</body>
+</html>
